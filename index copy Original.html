@@ -15,47 +15,10 @@
       background: #fffdf8;
       color: #1a1a1a;
       line-height: 1.6;
-      padding-top: 60px; /* space for fixed navbar */
     }
     a {
       text-decoration: none;
       color: #0B335C;
-    }
-
-    /* Top nav bar */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 60px;
-      background-color: #0B335C;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      z-index: 999;
-    }
-    nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      gap: 30px;
-    }
-    nav ul li {
-      
-    }
-    nav ul li a {
-      color: #fff;
-      font-weight: 600;
-      font-size: 1rem;
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: background-color 0.25s ease;
-    }
-    nav ul li a:hover,
-    nav ul li a:focus {
-      background-color: #084070;
-      outline: none;
     }
 
     /* Container */
@@ -136,29 +99,12 @@
         padding: 10px 22px;
         font-size: 1rem;
       }
-      nav ul {
-        gap: 16px;
-      }
-      nav ul li a {
-        font-size: 0.9rem;
-        padding: 6px 10px;
-      }
     }
   </style>
 </head>
 <body>
 
-  <nav aria-label="Primary navigation">
-    <ul>
-      <li><a href="#home" tabindex="0">Home</a></li>
-      <li><a href="#features" tabindex="0">Features</a></li>
-      <li><a href="#pricing" tabindex="0">Pricing</a></li>
-      <li><a href="#faq" tabindex="0">FAQ</a></li>
-      <li><a href="#contact" tabindex="0">Contact</a></li>
-    </ul>
-  </nav>
-
-  <div class="container" id="home">
+  <div class="container">
     <h1>ChoreMate</h1>
     <p class="description">
       Simplify your household management with ChoreMate — the intuitive dashboard that helps roommates claim, track, and complete chores easily, earning points and badges along the way.
@@ -168,8 +114,6 @@
 
     <a href="#contact" class="btn-learn-more" role="button">Learn More</a>
 
-    <!-- You can add feature, pricing, FAQ sections here if you want -->
-    
     <section id="contact" aria-label="Contact information">
       <h2>Contact Us</h2>
       <p>
