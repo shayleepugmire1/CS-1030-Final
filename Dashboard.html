@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ChoreMate — Dashboard Mock</title>
+  <style>
+    /* Basic reset */
+    * { box-sizing: border-box; }
+    html,body{height:100%;margin:0;font-family:Inter, "Helvetica Neue", Arial, sans-serif;background:#fffdf8;color:#1a1a1a;}
+    a { color: inherit; text-decoration: none; }
+
+    /* Top bar */
+    .topbar {
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px 22px;border-bottom:1px solid #eee;background:transparent;
+    }
+    .brand { display:flex;align-items:center;gap:12px;font-weight:700;font-size:20px;color:#0B335C;}
+    .hamburger {
+      width:36px;height:36px;border-radius:8px;border:1px solid #ddd;display:flex;align-items:center;justify-content:center;
+      background:#fff;
+    }
+
+    /* Layout */
+    .container { display:flex;gap:28px;padding:22px;max-width:1100px;margin:18px auto;}
+    .main { flex:1; min-width:260px; }
+    .side { width:300px; min-width:220px; }
+
+    /* Cards & sections */
+    .card { background:#fff;border-radius:12px;padding:14px;border:1px solid #eee;margin-bottom:18px;box-shadow: 0 1px 0 rgba(10,10,10,0.02); }
+    h2 { margin:8px 0 12px 0;font-size:18px;color:#0B335C; }
+    .subtle { color:#666;font-size:13px; }
+
+    /* Unclaimed chores list */
+    .unclaimed-list { display:flex;flex-direction:column;gap:8px; }
+    .chore-row { display:flex;align-items:center;justify-content:space-between;padding:10px;border-radius:8px;border:1px solid #eee;background:#fff; }
+    .chore-meta { display:flex;flex-direction:column; }
+    .claim-btn { padding:6px 10px;border-radius:8px;border:1px solid #0B335C;background:#0B335C;color:#fff;font-weight:600;cursor:pointer;}
+    .claim-btn[disabled]{opacity:0.5;cursor:not-allowed;}
+
+    /* My chores */
+    .my-chores { display:flex;flex-direction:column;gap:10px; }
+    .task { display:flex;align-items:center;justify-content:space-between;padding:12px;border-radius:8px;border:1px solid #eee; }
+    .task .title { font-weight:600; }
+    .task .info { font-size:13px;color:#444; }
+    .task-actions { display:flex;gap:8px; }
+    .action-btn { padding:6px 10px;border-radius:8px;border:1px solid #bdbdbd;background:#fff;cursor:pointer; }
+    .primary { background:#0B335C;color:#fff;border-color:#0B335C; }
+    .swap-btn { background:#fff3cd; border-color:#f1c40f; }
+    .complete-btn { background:#d4edda; border-color:#28a745; color:#0b3; }
+
+    /* Status colors */
+    .status-overdue { background:#fde2e2; border-color:#f5a2a2; }
+    .status-today { background:#dff0d8; border-color:#bfe5b0; }
+    .status-upcoming { background:#fff3cd; border-color:#f1d18b; }
+
+    /* Leaderboard */
+    .leaderboard { display:flex;flex-direction:column;gap:12px; }
+    .leader-row { display:flex;align-items:center;gap:10px; }
+    .avatar { width:36px;height:36px;border-radius:50%;display:inline-block;background:#e9eef6;display:flex;align-items:center;justify-content:center;font-weight:700;color:#0B335C; }
+    .bar { flex:1;height:14px;border-radius:8px;background:#eee;overflow:hidden; }
+    .bar-fill { height:100%;background:#0B335C;border-radius:8px 0 0 8px; }
+
+    /* Badges */
+    .badges { display:flex;gap:8px;flex-wrap:wrap; }
+    .badge { width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #eee;background:#fff; }
+    .badge img{width:34px;height:34px;display:block;}
+
+    /* Profile small */
+    .profile { display:flex;align-items:center;gap:12px; }
+    .profile .big-avatar { width:64px;height:64px;border-radius:50%;background:#e9eef6;display:flex;align-items:center;justify-content:center;font-size:22px;color:#0B335C;font-weight:700; }
+
+    /* Responsive */
+    @media (max-width:900px){
+      .container{flex-direction:column;padding:12px;}
+      .side{width:100%;}
+    }
+
+    /* tiny helpers */
+    .muted{color:#666;font-size:13px;}
+    .flex{display:flex;align-items:center;gap:8px;}
+  </style>
+</head>
+<body>
+  <header class="topbar" role="banner">
+    <div class="brand">
+      <div class="hamburger" aria-hidden="true" title="Menu">☰</div>
+      <div>ChoreMate</div>
+    </div>
+    <div class="flex" aria-label="profile and actions">
+      <div role="img" aria-label="User avatar" class="avatar" style="width:40px;height:40px;border-radius:50%;">A</div>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    <!-- Main column -->
+    <section class="main">
+      <!-- Unclaimed chores -->
+      <div class="card" aria-labelledby="unclaimed-title">
+        <h2 id="unclaimed-title">Unclaimed Chores</h2>
+        <div class="unclaimed-list" id="unclaimed-list" aria-live="polite"></div>
+      </div>
+
+      <!-- My chores -->
+      <div class="card" aria-labelledby="mychores-title">
+        <h2 id="mychores-title">My Chores</h2>
+        <div class="my-chores" id="my-chores" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Right column -->
+    <aside class="side" aria-label="Sidebar">
+      <div class="card" aria-labelledby="points-title">
+        <h2 id="points-title">Points Leaderboard</h2>
+        <div class="leaderboard" id="leaderboard"></div>
+      </div>
+
+      <div class="card" aria-labelledby="badges-title">
+        <h2 id="badges-title">Badges</h2>
+        <div class="badges" id="badges"></div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    /* ---------------------------
+       Simple mock data & helpers
+       --------------------------- */
+    const roommates = [
+      { id: 'alex', name: 'Alex', initials: 'A', points: 120 },
+      { id: 'sam', name: 'Sam', initials: 'S', points: 90 },
+      { id: 'morgan', name: 'Morgan', initials: 'M', points: 60 },
+    ];
+
+    // chores: id, title, due, assignedTo (id or null), status: 'open'|'assigned'|'completed'|'overdue', points
+    let chores = [
+      { id: 'c1', title: 'Dishes', due: 'Due by Wednesday', assignedTo: 'alex', status: 'overdue', points: 10 },
+      { id: 'c2', title: 'Vacuum Living Room', due: 'Due by Thursday', assignedTo: null, status: 'open', points: 12 },
+      { id: 'c3', title: 'Laundry', due: 'Wednesday', assignedTo: 'morgan', status: 'assigned', points: 8 },
+      { id: 'c4', title: 'Take Out Trash', due: 'Today', assignedTo: 'sam', status: 'assigned', points: 5 }
+    ];
+
+    // badges thresholds
+    const BADGE_RULES = [
+      { id:'cleanSweep', name:'CleanSweep', desc:'Complete all assigned chores in a week', threshold: 100 },
+      { id:'firstSuds', name:'First Suds', desc:'Complete your first chore', threshold: 5 },
+      { id:'choreNinja', name:'Chore Ninja', desc:'Complete 3 chores under 30 minutes', threshold: 40 }
+    ];
+
+    // local persistence (keeps changes across reloads in the same browser)
+    const STORAGE_KEY = 'choremate_state_v1';
+    function saveState(){
+      const payload = { chores, roommates };
+      try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(payload)); } catch(e){}
+    }
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(raw){ const parsed = JSON.parse(raw); chores = parsed.chores || chores; parsed.roommates && (parsed.roommates.forEach(r => {
+          const found = roommates.find(x=>x.id===r.id);
+          if(found) found.points = r.points;
+        })); }
+      }catch(e){}
+    }
+    loadState();
+
+    /* ---------------------------
+       Render functions
+       --------------------------- */
+    function renderUnclaimed(){
+      const el = document.getElementById('unclaimed-list');
+      el.innerHTML = '';
+      const open = chores.filter(c => !c.assignedTo);
+      if(open.length === 0){
+        el.innerHTML = '<div class="muted">No unclaimed chores — nice!</div>'; return;
+      }
+      open.forEach(c => {
+        const row = document.createElement('div');
+        row.className = 'chore-row';
+        row.innerHTML = `
+          <div class="chore-meta">
+            <div class="title">${escapeHtml(c.title)}</div>
+            <div class="muted">${escapeHtml(c.due)}</div>
+          </div>
+          <div>
+            <button class="claim-btn" data-id="${c.id}" aria-label="Claim ${escapeHtml(c.title)}">Claim</button>
+          </div>
+        `;
+        el.appendChild(row);
+      });
+      // attach handlers
+      el.querySelectorAll('.claim-btn').forEach(btn => btn.addEventListener('click', () => {
+        const id = btn.dataset.id;
+        // simple choose requester: prompt to pick roommate
+        const pick = prompt('Claim as which roommate? Enter name (Alex, Sam, Morgan):', 'Alex');
+        if(!pick) return;
+        const user = roommates.find(r => r.name.toLowerCase() === pick.toLowerCase());
+        if(!user){ alert('No roommate with that name. Try Alex, Sam or Morgan.'); return; }
+        claimChore(id, user.id);
+      }));
+    }
+
+    function renderMyChores(){
+      const el = document.getElementById('my-chores');
+      el.innerHTML = '';
+      // order: overdue, today/assigned, upcoming
+      const assigned = chores.filter(c => c.assignedTo);
+      if(assigned.length === 0){
+        el.innerHTML = '<div class="muted">No assigned chores yet.</div>'; return;
+      }
+      assigned.forEach(c => {
+        const owner = roommates.find(r => r.id === c.assignedTo) || {name:'—'};
+        const task = document.createElement('div');
+        let statusClass = 'status-upcoming';
+        if(c.status === 'overdue') statusClass = 'status-overdue';
+        if(c.status === 'assigned' || c.status === 'today') statusClass = 'status-today';
+        if(c.status === 'completed') statusClass = 'status-today';
+        task.className = 'task ' + statusClass;
+        task.innerHTML = `
+          <div>
+            <div class="title">${escapeHtml(c.title)} <span class="muted" style="font-weight:600">— ${escapeHtml(owner.name)}</span></div>
+            <div class="info">${escapeHtml(c.due)}</div>
+          </div>
+          <div class="task-actions" role="group" aria-label="Task actions">
+            <button class="action-btn swap-btn" data-id="${c.id}">Swap</button>
+            <button class="action-btn complete-btn primary" data-id="${c.id}">${c.status === 'completed' ? 'Completed' : 'Complete'}</button>
+          </div>
+        `;
+        el.appendChild(task);
+      });
+      // handlers
+      el.querySelectorAll('.swap-btn').forEach(b => b.addEventListener('click', () => {
+        const id = b.dataset.id;
+        const to = prompt('Swap with which roommate? Enter name (Alex, Sam, Morgan):', 'Sam');
+        if(!to) return;
+        const user = roommates.find(r => r.name.toLowerCase() === to.toLowerCase());
+        if(!user){ alert('Roommate not found.'); return; }
+        swapChore(id, user.id);
+      }));
+      el.querySelectorAll('.complete-btn').forEach(b => b.addEventListener('click', () => {
+        const id = b.dataset.id;
+        completeChore(id);
+      }));
+    }
+
+    function renderLeaderboard(){
+      const el = document.getElementById('leaderboard');
+      el.innerHTML = '';
+      // clone and sort
+      const sorted = [...roommates].sort((a,b)=>b.points-a.points);
+      const max = Math.max(...sorted.map(s=>s.points), 1);
+      sorted.forEach(u => {
+        const row = document.createElement('div');
+        row.className = 'leader-row';
+        const barWidthPercent = Math.round((u.points / max) * 100);
+        row.innerHTML = `
+          <div class="avatar" aria-hidden="true">${escapeHtml(u.initials)}</div>
+          <div style="flex:1;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <div style="font-weight:600">${escapeHtml(u.name)}</div>
+              <div class="muted" style="font-size:13px;">${u.points} pts</div>
+            </div>
+            <div class="bar" aria-hidden="true" style="margin-top:6px;">
+              <div class="bar-fill" style="width:${barWidthPercent}%;"></div>
+            </div>
+          </div>
+        `;
+        el.appendChild(row);
+      });
+    }
+
+    function renderBadges(){
+      const el = document.getElementById('badges');
+      el.innerHTML = '';
+      // show all badges (some may be dimmed if not earned)
+      BADGE_RULES.forEach(b => {
+        // we will mark as earned if ANY roommate meets threshold (for demo)
+        const earned = roommates.some(r => r.points >= b.threshold);
+        const badge = document.createElement('div');
+        badge.className = 'badge';
+        badge.title = b.name + (earned ? ' — earned' : ' — locked');
+        badge.innerHTML = `<img src="${badgeSvg(b.id, earned)}" alt="${escapeHtml(b.name)} badge">`;
+        if(!earned) badge.style.opacity = '0.45';
+        el.appendChild(badge);
+      });
+    }
+
+    /* ---------------------------
+       Actions
+       --------------------------- */
+    function claimChore(choreId, userId){
+      const chore = chores.find(c => c.id === choreId);
+      if(!chore) return;
+      chore.assignedTo = userId;
+      chore.status = 'assigned';
+      saveState();
+      rerenderAll();
+    }
+
+    function swapChore(choreId, targetUserId){
+      const chore = chores.find(c => c.id === choreId);
+      if(!chore) return;
+      chore.assignedTo = targetUserId;
+      chore.status = 'assigned';
+      saveState();
+      rerenderAll();
+    }
+
+    function completeChore(choreId){
+      const chore = chores.find(c => c.id === choreId);
+      if(!chore) return;
+      if(!chore.assignedTo){ alert('Chore not assigned'); return; }
+      // award points to assigned roommate
+      const user = roommates.find(r => r.id === chore.assignedTo);
+      if(user){
+        user.points += chore.points;
+        // optional: set chore as completed (remove assignment)
+        chore.status = 'completed';
+        chore.assignedTo = chore.assignedTo; // keep owner for history (demo)
+      } else {
+        alert('Assigned roommate not found.');
+        return;
+      }
+      saveState();
+      rerenderAll();
+    }
+
+    /* ---------------------------
+      Utilities & start
+       --------------------------- */
+    function rerenderAll(){
+      renderUnclaimed();
+      renderMyChores();
+      renderLeaderboard();
+      renderBadges();
+    }
+
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, s => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    }
+
+    // small inline SVGs encoded to data URLs for badges
+    function badgeSvg(id, earned){
+      // simple colorful placeholder svgs
+      const color = id === 'cleanSweep' ? '#7bd389' : id === 'firstSuds' ? '#ffb6c1' : '#ffd27f';
+      const stroke = earned ? '#0B335C' : '#bbb';
+      const label = id === 'cleanSweep' ? '🧹' : id === 'firstSuds' ? '🧼' : '🥷';
+      const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64'>
+        <rect rx='32' width='64' height='64' fill='${color}'/>
+        <text x='50%' y='54%' font-size='30' text-anchor='middle' alignment-baseline='central'>${label}</text>
+      </svg>`;
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+
+    // initial render
+    rerenderAll();
+
+    // Expose save on unload
+    window.addEventListener('beforeunload', saveState);
+
+  </script>
+   <footer style="border-top:1px solid #eee; padding:12px 22px; text-align:center; background:#fffdf8; font-size:14px; color:#666;">
+    <nav aria-label="Footer navigation">
+      <a href="#" style="margin:0 12px; color:#0B335C; text-decoration:none;">Contact Us</a> |
+      <a href="#" style="margin:0 12px; color:#0B335C; text-decoration:none;">FAQ</a> |
+      <a href="#" style="margin:0 12px; color:#0B335C; text-decoration:none;">About</a>
+    </nav>
+  </footer>
+</body>
+</html>
