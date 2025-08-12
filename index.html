@@ -1,12 +1,127 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ChoreMate - CS 1030 Project</title>
+  <style>
+    /* Reset & basics */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Inter', Arial, sans-serif;
+      background: #fffdf8;
+      color: #1a1a1a;
+      line-height: 1.6;
+    }
+    a {
+      text-decoration: none;
+      color: #0B335C;
+    }
+
+    /* Container */
+    .container {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    /* Product name */
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+      color: #0B335C;
+    }
+
+    /* Description */
+    p.description {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: #444;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Image */
+    img.preview {
+      max-width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(11, 51, 92, 0.2);
+      margin-bottom: 2rem;
+    }
+
+    /* Button */
+    .btn-learn-more {
+      background-color: #0B335C;
+      color: #fff;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: inline-block;
+    }
+    .btn-learn-more:hover,
+    .btn-learn-more:focus {
+      background-color: #084070;
+      outline: none;
+    }
+
+    /* Contact Section */
+    #contact {
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 1px solid #eee;
+      color: #666;
+      font-size: 1rem;
+    }
+    #contact a {
+      color: #0B335C;
+      font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      p.description {
+        font-size: 1rem;
+      }
+      .btn-learn-more {
+        padding: 10px 22px;
+        font-size: 1rem;
+      }
+    }
+  </style>
 </head>
 <body>
-    Hello, World
-    This is a simple website created as part of a project.
+
+  <div class="container">
+    <h1>ChoreMate</h1>
+    <p class="description">
+      Simplify your household management with ChoreMate — the intuitive dashboard that helps roommates claim, track, and complete chores easily, earning points and badges along the way.
+    </p>
+
+    <img src="picture.png" alt="ChoreMate dashboard preview" class="preview" />
+
+    <a href="#contact" class="btn-learn-more" role="button">Learn More</a>
+
+    <section id="contact" aria-label="Contact information">
+      <h2>Contact Us</h2>
+      <p>
+        Have questions or want to learn more? Email us at 
+        <a href="mailto:contact@choremate.com">contact@choremate.com</a>.
+      </p>
+    </section>
+  </div>
+
 </body>
 </html>
